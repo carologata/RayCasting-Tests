@@ -20,9 +20,9 @@ int32_t	main(void)
 	}
 	
 	map->player = malloc(sizeof(t_player));
-    map->player->px = 300;
-    map->player->py = 300;
-	map->player->pa = 0;
+    map->player->px = 150;
+    map->player->py = 250;
+	map->player->pa = (3*PI/2);
 	map->player->dx = 0;
     map->player->dy = 1;
 
