@@ -3,6 +3,7 @@
 int32_t	main(void)
 {
 	int			i;
+	// int j;
 	int			fd;
 	t_map 		*map;
 	mlx_t		*mlx;
@@ -16,15 +17,30 @@ int32_t	main(void)
 	while (i < SIZE)
 	{
 		map->frame[i] = get_next_line(fd);
+		// printf("map line: %s\n", map->frame[i]);
 		i++;
 	}
-	
+
+/* 	i = 0;
+	while(i < SIZE)
+	{
+		j = 0;
+		while(j < SIZE)
+		{
+			printf("%c ", map->frame[i][j]);
+			j++;
+		}
+		i++;
+		printf("\n");
+	} */
+
+
 	map->player = malloc(sizeof(t_player));
-    map->player->px = 150;
-    map->player->py = 250;
-	map->player->pa = (3*PI/2);
-	map->player->dx = 0;
-    map->player->dy = 1;
+    map->player->px = 314;
+    map->player->py = 257;
+	map->player->pa = (1.92);
+	map->player->dx = cos(map->player->pa) * 5;
+    map->player->dy = sin(map->player->pa) * 5;
 
 	mlx = init_mlx();
 	if (mlx == NULL)
