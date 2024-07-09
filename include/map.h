@@ -9,10 +9,11 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-# define WIDTH 512
+# define WIDTH 1024
 # define HEIGHT 512
 # define SIZE 8
 # define CELL 64
+# define DR 0.0174533
 
 # ifndef PI
 #  define PI 3.14159

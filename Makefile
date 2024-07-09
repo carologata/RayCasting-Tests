@@ -1,5 +1,5 @@
 NAME	:= cub
-CFLAGS	:= -Wextra -Wall -Werror -g3
+CFLAGS	:= -Wextra -Wall -Werror -g3 -w
 LIBMLX	:= ./lib/MLX42
 
 HEADERS	:= -I ./include -I $(LIBMLX)/include

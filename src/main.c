@@ -21,20 +21,6 @@ int32_t	main(void)
 		i++;
 	}
 
-/* 	i = 0;
-	while(i < SIZE)
-	{
-		j = 0;
-		while(j < SIZE)
-		{
-			printf("%c ", map->frame[i][j]);
-			j++;
-		}
-		i++;
-		printf("\n");
-	} */
-
-
 	map->player = malloc(sizeof(t_player));
     map->player->px = 314;
     map->player->py = 257;

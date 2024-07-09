@@ -39,7 +39,7 @@ void	ft_hook(void *param)
 	
 	if (mlx_is_key_down(map->mlx, MLX_KEY_A))
 	{
-		map->player->pa -= 0.1;
+		map->player->pa -= 0.05;
 		// printf("angle key: %f\n", map->player->pa);
 		if(map->player->pa < 0)
 			map->player->pa += 2*PI;
@@ -48,7 +48,7 @@ void	ft_hook(void *param)
 	}
     if (mlx_is_key_down(map->mlx, MLX_KEY_D))
 	{
-		map->player->pa += 0.1;
+		map->player->pa += 0.05;
 		if(map->player->pa > 2*PI)
 			map->player->pa -= 2*PI;
 		map->player->dx = cos(map->player->pa) * 5;
