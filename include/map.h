@@ -19,6 +19,16 @@
 #  define PI 3.14159
 # endif
 
+
+typedef struct s_math
+{
+	double rx;
+	double ry;
+	double distT;
+	double ra;
+	bool x;
+} t_math;
+
 typedef struct s_player
 {
 	int			px;
@@ -39,6 +49,7 @@ typedef struct s_map
 	mlx_image_t	*pmlx_image;
 	char		**frame;
 	t_player	*player;
+	mlx_texture_t *texture;
 }				t_map;
 
 typedef struct s_coordinate
@@ -95,5 +106,8 @@ void			randomize_player(t_map *map);
 
 void			ft_hook(void *param);
 // void			move(t_map *map);
+
+void 		draw_wall(double ca, t_math *math, int r, t_map *map);
+uint32_t	texture_to_rgb(mlx_texture_t *texture, int x, int y);
 
 #endif

@@ -40,7 +40,6 @@ void	ft_hook(void *param)
 	if (mlx_is_key_down(map->mlx, MLX_KEY_A))
 	{
 		map->player->pa -= 0.05;
-		// printf("angle key: %f\n", map->player->pa);
 		if(map->player->pa < 0)
 			map->player->pa += 2*PI;
 		map->player->dx = cos(map->player->pa) * 5;
@@ -64,7 +63,6 @@ void	ft_hook(void *param)
 		map->player->px -= map->player->dx;
 		map->player->py -= map->player->dy;
 	}
-
 	mlx_delete_image(map->mlx, map->pmlx_image);
 	map->pmlx_image = mlx_new_image(map->mlx, WIDTH, HEIGHT);
 	mlx_image_to_window(map->mlx, map->pmlx_image, 0, 0);

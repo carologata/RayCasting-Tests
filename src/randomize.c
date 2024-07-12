@@ -1,8 +1,5 @@
 #include "map.h"
 
-void draw_wall(double ca, double distT, int r, t_map *map);
-
-
 void	randomize_map(t_map *map)
 {
 	int i;
@@ -42,7 +39,7 @@ static double dist(int ax, int ay, int bx, int by)
 	return (sqrt((bx - ax)*(bx - ax) + (by - ay)*(by - ay)));
 }
 
-void	randomize_player(t_map *map)
+	void	randomize_player(t_map *map)
 {
 	t_coordinate point_1;
 	t_coordinate point_2;
@@ -51,6 +48,8 @@ void	randomize_player(t_map *map)
 	t_coordinate point_5;
 	t_coordinate point_6;
 
+	/* 1. Player - Draw yellow square */
+	
 	point_1.x = map->player->px - 5;
 	point_1.y = map->player->py - 5;
 	point_1.color = 0xFFFF00FF;
@@ -60,7 +59,8 @@ void	randomize_player(t_map *map)
 
 	fill_cell(&point_1, &point_2, map->pmlx_image);
 	
-	// printf("px: %d, py: %d, pa: %f\n", map->player->px, map->player->py, map->player->pa);
+
+	/* 2. Player - Draw yellow line direction */
 
 	map->player->dirx = (20 * cos(map->player->pa)) + map->player->px;
 	map->player->diry = (20 * sin(map->player->pa)) + map->player->py;
@@ -74,6 +74,7 @@ void	randomize_player(t_map *map)
 
 	bresenham(&point_3, &point_4, map->pmlx_image);
 
+	/* 3. Rays */
 
 	double aTan, nTan, ra, rx, ry, xo, yo, hx, hy, distH, vx, vy, distV, ca; 
 	int dof, mx, my;
@@ -187,23 +188,33 @@ void	randomize_player(t_map *map)
 				dof += 1;
 			}
 		}
-		
+
+		/* math structure - distT, rx, ry */
+		t_math math;
+
 		point_5.x = map->player->px;
 		point_5.y = map->player->py;
 		point_5.color = 0xFF0000FF;
 
-		double distT;
-
 		point_6.x = hx;
 		point_6.y = hy;
-		distT = distH;
 		point_6.color = 0xFF0000FF;
+		
+		math.rx = hx;
+		math.ry = hy;
+		math.distT = distH;
+		math.x = true;
 		if(distH > distV)
 		{
 			point_6.x = vx;
 			point_6.y = vy;
-			distT = distV;
+
+			math.rx = vx;
+			math.ry = vy;
+			math.distT = distV;
+			math.x = false;
 		}
+
 		bresenham(&point_5, &point_6, map->pmlx_image);
 
 		/* Draw 3D scene */
@@ -212,7 +223,9 @@ void	randomize_player(t_map *map)
 			ca += 2*PI;
 		if(ca > 2*PI)
 			ca -= 2*PI;
-		draw_wall(ca, distT, r, map);
+
+		math.ra = ra;
+		draw_wall(ca, &math, r, map);
 
 		/*  */
 
@@ -226,23 +239,64 @@ void	randomize_player(t_map *map)
 
 }
 
-void draw_wall(double ca, double distT, int r, t_map *map)
+void draw_wall(double ca, t_math *math, int r, t_map *map)
 {
 	double lineH;
 	double lineO;
 	t_coordinate point_1;
 	t_coordinate point_2;
 
-	distT = cos(ca) * distT;
-	lineH = (HEIGHT * CELL) / distT;
+	math->distT = cos(ca) * math->distT;
+	lineH = (HEIGHT * CELL) / math->distT;
 	lineO = (HEIGHT - lineH)/2;
 
-	point_1.x = (r * 8) + 530; 
+	int y;
+	double tx;
+	double ty;
+	double ty_step;
+	uint32_t color;
+
+	ty_step = map->texture->height / lineH;
+	ty = 0;
+
+	if(math->x)
+	{
+		tx = (int)(math->rx * (map->texture->width/CELL)) % map->texture->width;
+		if(math->ra < PI && math->ra > 0)
+			tx = (map->texture->width - 1) - tx;
+	}
+	else
+	{
+		tx = (int)(math->ry * (map->texture->height/CELL)) % map->texture->height;
+		if(math->ra > (PI/2) && math->ra < (3*PI/2))
+			tx = (map->texture->width - 1) - tx;
+	}
+	
+
+	y = 0;
+	while(y < lineH)
+	{	
+		color = texture_to_rgb(map->texture, tx, ty);
+		
+		point_1.x = (r * 8) + 530;
+		point_1.y = lineO + y;
+		point_1.color = color;
+		
+		point_2.x = (((r + 1) * 8) - 1) + 530;	
+		point_2.y = lineO + y;
+		point_2.color = color;
+		
+		bresenham(&point_1, &point_2, map->pmlx_image);
+		
+		ty += ty_step;
+		y++;
+	}
+
+	/* point_1.x = (r * 8) + 530; 
 	point_1.y = lineO;
 	point_1.color = 0xFF0000FF;
 	point_2.x = (((r + 1) * 8) - 1) + 530;
 	point_2.y = lineO + lineH;
 	point_2.color = 0xFF0000FF;
-
-	fill_cell(&point_1, &point_2, map->pmlx_image);
+	fill_cell(&point_1, &point_2, map->pmlx_image); */
 }

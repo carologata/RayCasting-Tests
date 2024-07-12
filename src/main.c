@@ -37,6 +37,16 @@ int32_t	main(void)
 
 	map->mlx = mlx;
 	map->mlx_image = mlx_image;
+	
+	/* Load texture */
+	mlx_texture_t *wall;
+	mlx_image_t *wall_image;
+	
+    wall = mlx_load_png("textures/1wall.png");
+	map->texture = wall;
+	// wall_image = mlx_texture_to_image(mlx, wall);
+	/* ------------ */
+
 	randomize_map(map);
 	if (init_window(mlx, mlx_image) == -1)
 		printf("window error\n");
